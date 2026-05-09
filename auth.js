@@ -5,7 +5,6 @@ const body = document.body;
 if (btnDarkModeAuth) {
     const iconoDarkModeAuth = btnDarkModeAuth.querySelector('i');
 
-    // Revisar si ya estaba activo
     if (localStorage.getItem('darkMode') === 'activado') {
         body.classList.add('dark-mode');
         iconoDarkModeAuth.classList.replace('fa-moon', 'fa-sun');
@@ -23,7 +22,7 @@ if (btnDarkModeAuth) {
     });
 }
 
-// --- MANEJO DE REGISTRO ---
+// --- MANEJO DE REGISTRO (AHORA EN INDEX.HTML) ---
 const formRegistro = document.getElementById('formRegistro');
 if (formRegistro) {
     formRegistro.addEventListener('submit', function(e) {
@@ -34,14 +33,13 @@ if (formRegistro) {
         const nuevoUsuario = { usuario: usuario, password: password };
         localStorage.setItem('usuarioBlog', JSON.stringify(nuevoUsuario));
         
-        // SweetAlert2 en lugar de alert()
         Swal.fire({
             icon: 'success',
             title: '¡Cuenta creada!',
             text: 'Registro exitoso. Ahora puedes iniciar sesión.',
             confirmButtonColor: '#6c5ce7'
         }).then(() => {
-            window.location.href = 'login.html';
+            window.location.href = 'login.html'; // Manda al login
         });
     });
 }
@@ -58,7 +56,6 @@ if (formLogin) {
         if (usuarioGuardado && usuarioGuardado.usuario === usuarioIngresado && usuarioGuardado.password === passwordIngresado) {
             localStorage.setItem('sesionActiva', 'true');
             
-            // SweetAlert2 con redirección automática
             Swal.fire({
                 icon: 'success',
                 title: '¡Bienvenido!',
@@ -66,11 +63,10 @@ if (formLogin) {
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
-                window.location.href = 'index.html'; 
+                window.location.href = 'blog.html'; // AHORA MANDA A BLOG.HTML
             });
             
         } else {
-            // SweetAlert2 de error
             Swal.fire({
                 icon: 'error',
                 title: 'Acceso Denegado',
@@ -81,8 +77,9 @@ if (formLogin) {
     });
 }
 
-// --- PROTECCIÓN DE RUTAS ---
-if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+// --- PROTECCIÓN DE RUTAS (AHORA PROTEGE BLOG.HTML) ---
+// Si alguien intenta entrar a blog.html sin sesión, lo manda a login
+if (window.location.pathname.includes('blog.html')) {
     const sesionActiva = localStorage.getItem('sesionActiva');
     if (!sesionActiva) {
         window.location.href = 'login.html';
