@@ -1,0 +1,8 @@
+[
+    {
+        "id": 1,
+        "titulo": "¡Mi primera publicación desde JSON!",
+        "contenido": "Esta es una publicación de prueba que se cargó automáticamente desde un archivo data.json simulando una base de datos real. ¡Genial!",
+        "fecha": "2026-05-09"
+    }
+]
