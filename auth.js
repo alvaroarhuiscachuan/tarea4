@@ -42,11 +42,30 @@ if (formLogin) {
             localStorage.setItem('sesionActiva', 'true');
             alert('¡Bienvenido!');
             
-            // Redirigir al blog (Por ahora lo dejo comentado hasta que hagamos esa parte)
-            // window.location.href = 'index.html'; 
-            console.log("Login exitoso");
+            // REDIRECCIÓN ACTIVADA: Te manda a la página principal
+            window.location.href = 'index.html'; 
+            
         } else {
             alert('Usuario o contraseña incorrectos.');
         }
+    });
+}
+
+// --- LÓGICA NUEVA PARA EL INDEX ---
+
+// Proteger la página principal (Si alguien entra sin iniciar sesión, lo bota al login)
+if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+    const sesionActiva = localStorage.getItem('sesionActiva');
+    if (!sesionActiva) {
+        window.location.href = 'login.html';
+    }
+}
+
+// Manejo del botón de Cerrar Sesión
+const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+if (btnCerrarSesion) {
+    btnCerrarSesion.addEventListener('click', function() {
+        localStorage.removeItem('sesionActiva'); // Borramos la sesión
+        window.location.href = 'login.html'; // Lo regresamos al login
     });
 }
