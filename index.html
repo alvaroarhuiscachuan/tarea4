@@ -3,43 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Blog Pro</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- CDN de FontAwesome para los Iconos -->
+    <title>Mi Blog Premium</title>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h2><i class="fa-solid fa-blog"></i> Mi Blog</h2>
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <!-- Botón de Modo Oscuro -->
-                <button id="btnDarkMode" title="Cambiar tema">
+            <h2><i class="fa-brands fa-blogger-b"></i> Blog<span style="color: var(--primary);">Dev</span></h2>
+            <div class="header-actions">
+                <button id="btnDarkMode" class="btn-icon" title="Cambiar tema">
                     <i class="fa-solid fa-moon"></i>
                 </button>
-                <!-- Botón Cerrar Sesión con icono -->
-                <button id="btnCerrarSesion">
-                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                <button id="btnCerrarSesion" class="btn-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Salir</span>
                 </button>
             </div>
         </header>
         
         <main>
-            <div style="margin-bottom: 30px;">
-                <h3><i class="fa-solid fa-pen"></i> Nueva Publicación</h3>
+            <section class="creator-section">
+                <h3><i class="fa-solid fa-pen-nib"></i> ¿Qué vas a compartir hoy?</h3>
                 <form id="formPost">
-                    <input type="text" id="tituloPost" placeholder="Título de la publicación..." required>
-                    <textarea id="contenidoPost" placeholder="¿Qué estás pensando hoy?..." rows="4" required></textarea>
-                    <button type="submit" id="btnPublicar">
+                    <input type="text" id="tituloPost" placeholder="Escribe un título llamativo..." required autocomplete="off">
+                    <textarea id="contenidoPost" placeholder="Desarrolla tu idea aquí..." rows="4" required></textarea>
+                    <button type="submit" id="btnPublicar" class="btn-main">
                         <i class="fa-solid fa-paper-plane"></i> Publicar
                     </button>
                 </form>
-            </div>
+            </section>
 
-            <h3><i class="fa-solid fa-list"></i> Mis Publicaciones</h3>
-            <div id="listaPublicaciones">
-                <!-- Los posts se inyectarán aquí -->
-            </div>
+            <section class="feed-section">
+                <h3><i class="fa-solid fa-layer-group"></i> Tu Feed</h3>
+                <div id="listaPublicaciones">
+                    <!-- Los posts se inyectarán aquí -->
+                </div>
+            </section>
         </main>
     </div>
 
