@@ -1,50 +1,75 @@
-let posts = JSON.parse(localStorage.getItem('postsBlog')) || [];
+let posts = [];
 let editandoId = null;
 
 const formPost = document.getElementById('formPost');
 const listaPublicaciones = document.getElementById('listaPublicaciones');
 const btnPublicar = document.getElementById('btnPublicar');
 
-// --- NUEVO: LÓGICA DEL MODO OSCURO ---
+// --- 0. MODO OSCURO PARA EL INDEX (SOLUCIÓN DEL BUG) ---
 const btnDarkMode = document.getElementById('btnDarkMode');
-const body = document.body;
-const iconoDarkMode = btnDarkMode.querySelector('i');
+if (btnDarkMode) {
+    const body = document.body;
+    const iconoDarkMode = btnDarkMode.querySelector('i');
 
-// Revisar si el usuario ya tenía el modo oscuro guardado de antes
-if (localStorage.getItem('darkMode') === 'activado') {
-    body.classList.add('dark-mode');
-    iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+    // Revisar estado guardado
+    if (localStorage.getItem('darkMode') === 'activado') {
+        body.classList.add('dark-mode');
+        iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+    }
+
+    btnDarkMode.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'activado');
+            iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            localStorage.setItem('darkMode', 'desactivado');
+            iconoDarkMode.classList.replace('fa-sun', 'fa-moon');
+        }
+    });
 }
 
-btnDarkMode.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
+// --- 1. CARGA INICIAL (JSON SIMULADO Y LOCALSTORAGE) ---
+function inicializarDatos() {
+    const datosGuardados = localStorage.getItem('postsBlog');
     
-    if (body.classList.contains('dark-mode')) {
-        localStorage.setItem('darkMode', 'activado');
-        iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+    if (datosGuardados) {
+        posts = JSON.parse(datosGuardados);
+        renderizarPosts();
     } else {
-        localStorage.setItem('darkMode', 'desactivado');
-        iconoDarkMode.classList.replace('fa-sun', 'fa-moon');
+        fetch('data.json')
+            .then(respuesta => respuesta.json())
+            .then(datosJSON => {
+                posts = datosJSON;
+                localStorage.setItem('postsBlog', JSON.stringify(posts));
+                renderizarPosts();
+            })
+            .catch(error => {
+                console.error("Error al cargar el JSON:", error);
+                renderizarPosts();
+            });
     }
-});
-// -------------------------------------
+}
 
+// --- 2. RENDERIZAR LAS PUBLICACIONES ---
 function renderizarPosts() {
     listaPublicaciones.innerHTML = ''; 
 
     if (posts.length === 0) {
-        listaPublicaciones.innerHTML = '<p style="text-align:center; color: gray;"><i class="fa-regular fa-folder-open"></i> Aún no hay publicaciones. ¡Sé el primero en escribir algo!</p>';
+        listaPublicaciones.innerHTML = '<p style="text-align:center; color: var(--text-muted);"><i class="fa-regular fa-folder-open"></i> Aún no hay publicaciones.</p>';
         return;
     }
 
-    posts.forEach((post) => {
+    const postsOrdenados = [...posts].sort((a, b) => b.id - a.id);
+
+    postsOrdenados.forEach((post) => {
         const postElement = document.createElement('div');
-        postElement.className = 'post-card'; // Usamos la nueva clase CSS
+        postElement.className = 'post-card';
         
         postElement.innerHTML = `
-            <h4 style="margin: 0 0 5px 0; font-size: 1.2rem;">${post.titulo}</h4>
-            <small style="color: gray;"><i class="fa-regular fa-calendar"></i> ${post.fecha}</small>
-            <p style="line-height: 1.5; margin-top: 10px;">${post.contenido}</p>
+            <h4 style="margin: 0 0 5px 0; font-size: 1.3rem; color: var(--primary);">${post.titulo}</h4>
+            <small style="color: var(--text-muted);"><i class="fa-regular fa-calendar"></i> ${post.fecha}</small>
+            <p style="line-height: 1.6; margin-top: 10px;">${post.contenido}</p>
             <div class="post-actions">
                 <button onclick="editarPost(${post.id})" class="btn-editar">
                     <i class="fa-solid fa-pen-to-square"></i> Editar
@@ -58,6 +83,7 @@ function renderizarPosts() {
     });
 }
 
+// --- 3. CREAR O EDITAR CON VISTA PREVIA (SWEETALERT) ---
 if (formPost) {
     formPost.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -66,31 +92,56 @@ if (formPost) {
         const contenido = document.getElementById('contenidoPost').value;
         const fechaActual = new Date().toISOString().split('T')[0];
 
-        if (editandoId) {
-            const postIndex = posts.findIndex(p => p.id === editandoId);
-            posts[postIndex].titulo = titulo;
-            posts[postIndex].contenido = contenido;
-            
-            editandoId = null; 
-            btnPublicar.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publicar'; 
-        } else {
-            const nuevoPost = {
-                id: Date.now(),
-                titulo: titulo,
-                contenido: contenido,
-                fecha: fechaActual
-            };
-            posts.push(nuevoPost);
-        }
+        Swal.fire({
+            title: 'Vista Previa',
+            html: `
+                <div style="text-align: left; background: var(--input-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-color);">
+                    <h3 style="margin: 0 0 10px 0; color: var(--primary);">${titulo}</h3>
+                    <p style="margin: 0; font-size: 0.95rem;">${contenido}</p>
+                </div>
+                <br><p>¿Deseas publicar esto ahora?</p>
+            `,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#6c5ce7',
+            cancelButtonColor: '#636e72',
+            confirmButtonText: '<i class="fa-solid fa-paper-plane"></i> Sí, publicar',
+            cancelButtonText: 'Seguir editando'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (editandoId) {
+                    const postIndex = posts.findIndex(p => p.id === editandoId);
+                    posts[postIndex].titulo = titulo;
+                    posts[postIndex].contenido = contenido;
+                    editandoId = null; 
+                    btnPublicar.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publicar'; 
+                } else {
+                    const nuevoPost = {
+                        id: Date.now(),
+                        titulo: titulo,
+                        contenido: contenido,
+                        fecha: fechaActual
+                    };
+                    posts.push(nuevoPost);
+                }
 
-        localStorage.setItem('postsBlog', JSON.stringify(posts));
-        formPost.reset();
-        renderizarPosts();
+                localStorage.setItem('postsBlog', JSON.stringify(posts));
+                formPost.reset();
+                renderizarPosts();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Publicado con éxito!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        });
     });
 }
 
+// --- 4. ELIMINAR ---
 function eliminarPost(id) {
-    // Reemplazamos el confirm() nativo por SweetAlert2
     Swal.fire({
         title: '¿Eliminar publicación?',
         text: "Esta acción no se puede deshacer.",
@@ -102,15 +153,12 @@ function eliminarPost(id) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Lógica de eliminación
             posts = posts.filter(post => post.id !== id);
             localStorage.setItem('postsBlog', JSON.stringify(posts));
             renderizarPosts();
             
-            // Alerta de éxito
             Swal.fire({
                 title: '¡Eliminado!',
-                text: 'Tu publicación ha sido borrada.',
                 icon: 'success',
                 timer: 1500,
                 showConfirmButton: false
@@ -119,6 +167,7 @@ function eliminarPost(id) {
     });
 }
 
+// --- 5. EDITAR ---
 function editarPost(id) {
     const post = posts.find(p => p.id === id);
     
@@ -128,7 +177,7 @@ function editarPost(id) {
     editandoId = id;
     btnPublicar.innerHTML = '<i class="fa-solid fa-check"></i> Actualizar Publicación';
     
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Animación suave al subir
+    window.scrollTo({ top: 0, behavior: 'smooth' }); 
 }
 
-renderizarPosts();
+inicializarDatos();
