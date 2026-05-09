@@ -5,21 +5,42 @@ const formPost = document.getElementById('formPost');
 const listaPublicaciones = document.getElementById('listaPublicaciones');
 const btnPublicar = document.getElementById('btnPublicar');
 
+// --- 0. MODO OSCURO PARA EL INDEX (SOLUCIÓN DEL BUG) ---
+const btnDarkMode = document.getElementById('btnDarkMode');
+if (btnDarkMode) {
+    const body = document.body;
+    const iconoDarkMode = btnDarkMode.querySelector('i');
+
+    // Revisar estado guardado
+    if (localStorage.getItem('darkMode') === 'activado') {
+        body.classList.add('dark-mode');
+        iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+    }
+
+    btnDarkMode.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'activado');
+            iconoDarkMode.classList.replace('fa-moon', 'fa-sun');
+        } else {
+            localStorage.setItem('darkMode', 'desactivado');
+            iconoDarkMode.classList.replace('fa-sun', 'fa-moon');
+        }
+    });
+}
+
 // --- 1. CARGA INICIAL (JSON SIMULADO Y LOCALSTORAGE) ---
 function inicializarDatos() {
     const datosGuardados = localStorage.getItem('postsBlog');
     
     if (datosGuardados) {
-        // Si ya hay datos en LocalStorage, los usamos
         posts = JSON.parse(datosGuardados);
         renderizarPosts();
     } else {
-        // Si está vacío, leemos el archivo data.json simulando una petición a una API
         fetch('data.json')
             .then(respuesta => respuesta.json())
             .then(datosJSON => {
                 posts = datosJSON;
-                // Guardamos esos datos iniciales en LocalStorage
                 localStorage.setItem('postsBlog', JSON.stringify(posts));
                 renderizarPosts();
             })
@@ -39,7 +60,6 @@ function renderizarPosts() {
         return;
     }
 
-    // Ordenamos para que las más nuevas salgan arriba
     const postsOrdenados = [...posts].sort((a, b) => b.id - a.id);
 
     postsOrdenados.forEach((post) => {
@@ -72,7 +92,6 @@ if (formPost) {
         const contenido = document.getElementById('contenidoPost').value;
         const fechaActual = new Date().toISOString().split('T')[0];
 
-        // VISTA PREVIA CON SWEETALERT2
         Swal.fire({
             title: 'Vista Previa',
             html: `
@@ -90,7 +109,6 @@ if (formPost) {
             cancelButtonText: 'Seguir editando'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Si el usuario confirma, guardamos los datos
                 if (editandoId) {
                     const postIndex = posts.findIndex(p => p.id === editandoId);
                     posts[postIndex].titulo = titulo;
@@ -111,7 +129,6 @@ if (formPost) {
                 formPost.reset();
                 renderizarPosts();
 
-                // Alerta de éxito
                 Swal.fire({
                     icon: 'success',
                     title: '¡Publicado con éxito!',
@@ -163,5 +180,4 @@ function editarPost(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' }); 
 }
 
-// Inicializar al cargar la página
 inicializarDatos();
