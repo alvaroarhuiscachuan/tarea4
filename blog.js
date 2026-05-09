@@ -90,11 +90,33 @@ if (formPost) {
 }
 
 function eliminarPost(id) {
-    if(confirm("¿Estás seguro de que deseas eliminar esta publicación?")) {
-        posts = posts.filter(post => post.id !== id);
-        localStorage.setItem('postsBlog', JSON.stringify(posts));
-        renderizarPosts();
-    }
+    // Reemplazamos el confirm() nativo por SweetAlert2
+    Swal.fire({
+        title: '¿Eliminar publicación?',
+        text: "Esta acción no se puede deshacer.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ff7675',
+        cancelButtonColor: '#636e72',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Lógica de eliminación
+            posts = posts.filter(post => post.id !== id);
+            localStorage.setItem('postsBlog', JSON.stringify(posts));
+            renderizarPosts();
+            
+            // Alerta de éxito
+            Swal.fire({
+                title: '¡Eliminado!',
+                text: 'Tu publicación ha sido borrada.',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
 }
 
 function editarPost(id) {

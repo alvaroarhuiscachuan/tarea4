@@ -2,18 +2,35 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro - Mi Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Mi Blog Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="container">
-        <h2>Crear Cuenta</h2>
+    <div class="container auth-box">
+        <header style="border-bottom: none; margin-bottom: 10px;">
+            <h2><i class="fa-solid fa-user-plus"></i> Registro</h2>
+            <button id="btnDarkModeAuth" class="btn-icon" title="Cambiar tema">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </header>
+        
         <form id="formRegistro">
-            <input type="text" id="regUsuario" placeholder="Nombre de usuario" required>
-            <input type="password" id="regPassword" placeholder="Contraseña" required>
-            <button type="submit">Registrarse</button>
+            <input type="text" id="regUsuario" placeholder="Elige un nombre de usuario" required autocomplete="off">
+            <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
+            <button type="submit" class="btn-main" style="margin-top: 10px;">
+                <i class="fa-solid fa-check"></i> Crear Cuenta
+            </button>
         </form>
-        <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+        
+        <p style="text-align: center; margin-top: 25px; font-size: 0.9rem;">
+            ¿Ya tienes cuenta? <a href="login.html" class="auth-link">Inicia sesión aquí</a>
+        </p>
     </div>
     <script src="auth.js"></script>
 </body>

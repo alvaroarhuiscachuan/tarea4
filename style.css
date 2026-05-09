@@ -232,3 +232,21 @@ button:active {
     .post-actions { flex-direction: column; }
     .post-actions button { width: 100%; }
 }
+/* Utilidad para hacer las tarjetas de Login/Registro más estrechas */
+.auth-box {
+    max-width: 450px;
+    margin: auto;
+}
+
+/* Estilo para los enlaces en la página de Auth */
+.auth-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.auth-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
