@@ -2,36 +2,47 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Blog Pro</title>
     <link rel="stylesheet" href="style.css">
+    <!-- CDN de FontAwesome para los Iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container" style="width: 80%; max-width: 800px; margin-top: 50px;">
-        <header style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Bienvenido a mi Blog</h2>
-            <button id="btnCerrarSesion" style="background-color: #d9534f; width: auto; padding: 10px;">Cerrar Sesión</button>
+    <div class="container">
+        <header>
+            <h2><i class="fa-solid fa-blog"></i> Mi Blog</h2>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <!-- Botón de Modo Oscuro -->
+                <button id="btnDarkMode" title="Cambiar tema">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <!-- Botón Cerrar Sesión con icono -->
+                <button id="btnCerrarSesion">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+            </div>
         </header>
         
         <main>
-            <!-- Formulario para CREAR publicación -->
-            <div style="background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
-                <h3>Crear Nueva Publicación</h3>
+            <div style="margin-bottom: 30px;">
+                <h3><i class="fa-solid fa-pen"></i> Nueva Publicación</h3>
                 <form id="formPost">
-                    <input type="text" id="tituloPost" placeholder="Título de la publicación" required>
-                    <textarea id="contenidoPost" placeholder="Escribe tu contenido aquí..." rows="4" style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
-                    <button type="submit">Publicar</button>
+                    <input type="text" id="tituloPost" placeholder="Título de la publicación..." required>
+                    <textarea id="contenidoPost" placeholder="¿Qué estás pensando hoy?..." rows="4" required></textarea>
+                    <button type="submit" id="btnPublicar">
+                        <i class="fa-solid fa-paper-plane"></i> Publicar
+                    </button>
                 </form>
             </div>
 
-            <!-- Lista donde se mostrarán (LEER) las publicaciones -->
-            <h3>Mis Publicaciones</h3>
+            <h3><i class="fa-solid fa-list"></i> Mis Publicaciones</h3>
             <div id="listaPublicaciones">
-                <!-- Aquí aparecerán los posts creados con JavaScript -->
+                <!-- Los posts se inyectarán aquí -->
             </div>
         </main>
     </div>
 
-    <!-- Cargamos ambos scripts al final -->
     <script src="auth.js"></script>
     <script src="blog.js"></script>
 </body>

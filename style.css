@@ -1,40 +1,130 @@
+/* Variables de colores para Modo Claro (por defecto) */
+:root {
+    --bg-color: #f4f7f6;
+    --text-color: #333333;
+    --container-bg: #ffffff;
+    --border-color: #dddddd;
+    --btn-primary-1: #6e8efb;
+    --btn-primary-2: #a777e3;
+    --btn-danger: #ff4b4b;
+    --btn-warning: #ffb703;
+    --shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* Variables de colores para Modo Oscuro */
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --container-bg: #1e1e1e;
+    --border-color: #333333;
+    --shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+/* Estilos Globales con Transiciones */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.4s ease, color 0.4s ease;
     display: flex;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
-    background-color: white;
+    background-color: var(--container-bg);
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 300px;
-    text-align: center;
-}
-
-input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
+    border-radius: 12px;
+    box-shadow: var(--shadow);
     width: 100%;
-    padding: 10px;
-    background-color: #2b3a4a;
+    max-width: 800px;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Encabezado */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+/* Formularios y Entradas */
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--btn-primary-1);
+    box-shadow: 0 0 8px rgba(110, 142, 251, 0.3);
+}
+
+/* Botones Modernos */
+button {
+    background: linear-gradient(135deg, var(--btn-primary-1), var(--btn-primary-2));
     color: white;
     border: none;
-    border-radius: 4px;
+    padding: 12px 20px;
+    border-radius: 8px;
     cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre icono y texto */
 }
 
 button:hover {
-    background-color: #1a242f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Botones Específicos */
+#btnCerrarSesion { background: var(--btn-danger); }
+.btn-eliminar { background: var(--btn-danger); padding: 8px 12px; font-size: 0.9rem;}
+.btn-editar { background: var(--btn-warning); color: #121212; padding: 8px 12px; font-size: 0.9rem; }
+#btnDarkMode { background: transparent; color: var(--text-color); font-size: 1.5rem; box-shadow: none; padding: 5px; }
+#btnDarkMode:hover { transform: scale(1.1); box-shadow: none; }
+
+/* Tarjetas de Publicaciones */
+.post-card {
+    background: var(--container-bg);
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, border-color 0.3s;
+}
+
+.post-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--btn-primary-1);
+}
+
+.post-actions {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
 }
