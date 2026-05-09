@@ -3,49 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Blog Personal</title>
+    <title>Registro - Mi Blog Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <!-- ¡Aquí cambiamos el nombre y el ícono! -->
-            <h2><i class="fa-solid fa-user-pen"></i> Mi Blog <span style="color: var(--primary);">Personal</span></h2>
-            <div class="header-actions">
-                <button id="btnDarkMode" class="btn-icon" title="Cambiar tema">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-                <button id="btnCerrarSesion" class="btn-logout">
-                    <i class="fa-solid fa-right-from-bracket"></i> <span>Salir</span>
-                </button>
-            </div>
+    <div class="container auth-box">
+        <header style="border-bottom: none; margin-bottom: 10px;">
+            <h2><i class="fa-solid fa-user-plus"></i> Registro</h2>
+            <button id="btnDarkModeAuth" class="btn-icon" title="Cambiar tema">
+                <i class="fa-solid fa-moon"></i>
+            </button>
         </header>
         
-        <main>
-            <section class="creator-section">
-                <h3><i class="fa-solid fa-pen-nib"></i> ¿Qué vas a compartir hoy?</h3>
-                <form id="formPost">
-                    <input type="text" id="tituloPost" placeholder="Escribe un título llamativo..." required autocomplete="off">
-                    <textarea id="contenidoPost" placeholder="Desarrolla tu idea aquí..." rows="4" required></textarea>
-                    <button type="submit" id="btnPublicar" class="btn-main">
-                        <i class="fa-solid fa-paper-plane"></i> Publicar
-                    </button>
-                </form>
-            </section>
-
-            <section class="feed-section">
-                <h3><i class="fa-solid fa-layer-group"></i> Tu Feed</h3>
-                <div id="listaPublicaciones">
-                    <!-- Los posts se inyectarán aquí -->
-                </div>
-            </section>
-        </main>
+        <form id="formRegistro">
+            <input type="text" id="regUsuario" placeholder="Elige un nombre de usuario" required autocomplete="off">
+            <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
+            <button type="submit" class="btn-main" style="margin-top: 10px;">
+                <i class="fa-solid fa-check"></i> Crear Cuenta
+            </button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 25px; font-size: 0.9rem;">
+            ¿Ya tienes cuenta? <a href="login.html" class="auth-link">Inicia sesión aquí</a>
+        </p>
     </div>
-
     <script src="auth.js"></script>
-    <script src="blog.js"></script>
 </body>
 </html>
