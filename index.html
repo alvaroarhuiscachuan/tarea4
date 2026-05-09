@@ -9,14 +9,30 @@
     <div class="container" style="width: 80%; max-width: 800px; margin-top: 50px;">
         <header style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Bienvenido a mi Blog</h2>
-            <button id="btnCerrarSesion" style="width: auto; background-color: #d9534f;">Cerrar Sesión</button>
+            <button id="btnCerrarSesion" style="background-color: #d9534f; width: auto; padding: 10px;">Cerrar Sesión</button>
         </header>
         
         <main>
-            <p>Aquí irá la lista de publicaciones (CRUD) más adelante...</p>
+            <!-- Formulario para CREAR publicación -->
+            <div style="background: #f9f9f9; padding: 20px; margin-bottom: 20px; border-radius: 8px;">
+                <h3>Crear Nueva Publicación</h3>
+                <form id="formPost">
+                    <input type="text" id="tituloPost" placeholder="Título de la publicación" required>
+                    <textarea id="contenidoPost" placeholder="Escribe tu contenido aquí..." rows="4" style="width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;" required></textarea>
+                    <button type="submit">Publicar</button>
+                </form>
+            </div>
+
+            <!-- Lista donde se mostrarán (LEER) las publicaciones -->
+            <h3>Mis Publicaciones</h3>
+            <div id="listaPublicaciones">
+                <!-- Aquí aparecerán los posts creados con JavaScript -->
+            </div>
         </main>
     </div>
 
+    <!-- Cargamos ambos scripts al final -->
     <script src="auth.js"></script>
+    <script src="blog.js"></script>
 </body>
 </html>
