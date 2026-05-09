@@ -1,59 +1,87 @@
-// Manejo del formulario de Registro
-const formRegistro = document.getElementById('formRegistro');
+// --- LÓGICA DE MODO OSCURO PARA LOGIN Y REGISTRO ---
+const btnDarkModeAuth = document.getElementById('btnDarkModeAuth');
+const body = document.body;
 
-if (formRegistro) {
-    formRegistro.addEventListener('submit', function(e) {
-        e.preventDefault(); // Evita que la página se recargue al enviar
+if (btnDarkModeAuth) {
+    const iconoDarkModeAuth = btnDarkModeAuth.querySelector('i');
 
-        const usuario = document.getElementById('regUsuario').value;
-        const password = document.getElementById('regPassword').value;
+    // Revisar si ya estaba activo
+    if (localStorage.getItem('darkMode') === 'activado') {
+        body.classList.add('dark-mode');
+        iconoDarkModeAuth.classList.replace('fa-moon', 'fa-sun');
+    }
 
-        // Creamos un objeto con los datos del usuario
-        const nuevoUsuario = {
-            usuario: usuario,
-            password: password
-        };
-
-        // Guardamos en LocalStorage. Como solo acepta texto, usamos JSON.stringify
-        localStorage.setItem('usuarioBlog', JSON.stringify(nuevoUsuario));
-        
-        alert('Registro exitoso. ¡Ahora puedes iniciar sesión!');
-        window.location.href = 'login.html'; // Te manda a la página de login
-    });
-}
-
-// Manejo del formulario de Login
-const formLogin = document.getElementById('formLogin');
-
-if (formLogin) {
-    formLogin.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const usuarioIngresado = document.getElementById('logUsuario').value;
-        const passwordIngresado = document.getElementById('logPassword').value;
-
-        // Traemos el usuario que guardamos en LocalStorage y lo convertimos a objeto con JSON.parse
-        const usuarioGuardado = JSON.parse(localStorage.getItem('usuarioBlog'));
-
-        // Validamos si existe y si las credenciales coinciden
-        if (usuarioGuardado && usuarioGuardado.usuario === usuarioIngresado && usuarioGuardado.password === passwordIngresado) {
-            
-            // Creamos la "sesión activa" para saber que el usuario ya entró
-            localStorage.setItem('sesionActiva', 'true');
-            alert('¡Bienvenido!');
-            
-            // REDIRECCIÓN ACTIVADA: Te manda a la página principal
-            window.location.href = 'index.html'; 
-            
+    btnDarkModeAuth.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        if (body.classList.contains('dark-mode')) {
+            localStorage.setItem('darkMode', 'activado');
+            iconoDarkModeAuth.classList.replace('fa-moon', 'fa-sun');
         } else {
-            alert('Usuario o contraseña incorrectos.');
+            localStorage.setItem('darkMode', 'desactivado');
+            iconoDarkModeAuth.classList.replace('fa-sun', 'fa-moon');
         }
     });
 }
 
-// --- LÓGICA NUEVA PARA EL INDEX ---
+// --- MANEJO DE REGISTRO ---
+const formRegistro = document.getElementById('formRegistro');
+if (formRegistro) {
+    formRegistro.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usuario = document.getElementById('regUsuario').value;
+        const password = document.getElementById('regPassword').value;
 
-// Proteger la página principal (Si alguien entra sin iniciar sesión, lo bota al login)
+        const nuevoUsuario = { usuario: usuario, password: password };
+        localStorage.setItem('usuarioBlog', JSON.stringify(nuevoUsuario));
+        
+        // SweetAlert2 en lugar de alert()
+        Swal.fire({
+            icon: 'success',
+            title: '¡Cuenta creada!',
+            text: 'Registro exitoso. Ahora puedes iniciar sesión.',
+            confirmButtonColor: '#6c5ce7'
+        }).then(() => {
+            window.location.href = 'login.html';
+        });
+    });
+}
+
+// --- MANEJO DE LOGIN ---
+const formLogin = document.getElementById('formLogin');
+if (formLogin) {
+    formLogin.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const usuarioIngresado = document.getElementById('logUsuario').value;
+        const passwordIngresado = document.getElementById('logPassword').value;
+        const usuarioGuardado = JSON.parse(localStorage.getItem('usuarioBlog'));
+
+        if (usuarioGuardado && usuarioGuardado.usuario === usuarioIngresado && usuarioGuardado.password === passwordIngresado) {
+            localStorage.setItem('sesionActiva', 'true');
+            
+            // SweetAlert2 con redirección automática
+            Swal.fire({
+                icon: 'success',
+                title: '¡Bienvenido!',
+                text: 'Iniciando sesión...',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'index.html'; 
+            });
+            
+        } else {
+            // SweetAlert2 de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Acceso Denegado',
+                text: 'Usuario o contraseña incorrectos.',
+                confirmButtonColor: '#ff7675'
+            });
+        }
+    });
+}
+
+// --- PROTECCIÓN DE RUTAS ---
 if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
     const sesionActiva = localStorage.getItem('sesionActiva');
     if (!sesionActiva) {
@@ -61,11 +89,24 @@ if (window.location.pathname.includes('index.html') || window.location.pathname 
     }
 }
 
-// Manejo del botón de Cerrar Sesión
+// --- BOTÓN DE CERRAR SESIÓN ---
 const btnCerrarSesion = document.getElementById('btnCerrarSesion');
 if (btnCerrarSesion) {
     btnCerrarSesion.addEventListener('click', function() {
-        localStorage.removeItem('sesionActiva'); // Borramos la sesión
-        window.location.href = 'login.html'; // Lo regresamos al login
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: "Tendrás que volver a ingresar tus credenciales.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#6c5ce7',
+            cancelButtonColor: '#ff7675',
+            confirmButtonText: 'Sí, salir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem('sesionActiva');
+                window.location.href = 'login.html';
+            }
+        });
     });
 }
